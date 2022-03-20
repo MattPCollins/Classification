@@ -47,6 +47,8 @@ Fuzzy matching (or Approximate String Matching) is used to identify strings that
 Using SequenceMatcher() gave me a matrix detailing a quantitative correlation between each of the values. I’ve used the Plotly package to produce the output matrix plot as this interactive and we only need see the data when we’re highlighting the cells in question. 
 Note: These plots are very useful for our understanding on smaller samples of data like the one we’re using but quickly become unruly when comparing large datasets. As such it is useful for visualising during our Exploratory Data Analysis, and the plotting can be left out when creating our model. More on these performance considerations later. (chunking data into subsets before final comparisons)
 
+![](https://github.com/MattPCollins/Classification/blob/main/images/matrix.png)
+
 
 The idea now is to associate any values which have a high enough correlation. I chose an arbitrary value of 0.8 (80%) similarity to start with - this can be tuned further down the line.
 This can be an iterative process to determine what correlation we actually need to represent. Ideally we want to choose a threshold which allows a great amount of independence in the output values, without being too strict (at 99% similarity you are preventing “vodaphone” and “vodaphone uk" from being grouped together).
@@ -78,6 +80,7 @@ We’ll also want to remember that at the higher similarity thresholds then we�
 
 A quick plot against a sample like this gives us some useful info about what value might be worth choosing:
 
+![](https://github.com/MattPCollins/Classification/blob/main/images/line_graph.png)
 
 
 Could cross-fold validation against several random samples and use the mean value to help ascertain threshold to use.
@@ -95,7 +98,12 @@ We’re in a good place to use this now.
 The quickest example is to assume we’re in a place to use this data as-is. In our example, we could classify on this directly
 Our DataFrame:
 
+![](https://github.com/MattPCollins/Classification/blob/main/images/table2.png)
+
+
 We can look at the average values for satisfaction ratings, years a customer has stayed with the broadband provider and their monthly costs:
+
+![](https://github.com/MattPCollins/Classification/blob/main/images/bar_graph.png)
 
 
 __Usage:__
