@@ -18,7 +18,7 @@ This is a rather specific example, but it has its applications when handling use
 
 One possible example could be a survey on broadband providers, where users are asked to rate their current provider along with other information. This may take the form of the following table:
 
-[table1]: https://github.com/MattPCollins/Classification/blob/main/images/table1.png "Example DataFrame"
+![alt text]: https://github.com/MattPCollins/Classification/blob/main/images/table1.png "Example DataFrame"
 
 
 Taking a closer look at the [broadband] column, which we might want to group our analysis by, it gives a quick insight into how users may manually input data "correctly", but makes classification based on these values that little bit harder.
