@@ -18,6 +18,7 @@ This is a rather specific example, but it has its applications when handling use
 
 One possible example could be a survey on broadband providers, where users are asked to rate their current provider along with other information. This may take the form of the following table:
 
+[table1]: https://github.com/MattPCollins/Classification/blob/main/images/table1.png "Example DataFrame"
 
 
 Taking a closer look at the [broadband] column, which we might want to group our analysis by, it gives a quick insight into how users may manually input data "correctly", but makes classification based on these values that little bit harder.
@@ -60,10 +61,13 @@ This reduces our feature set down from 9 elements to the following 5:
 
 This is where the domain knowledge comes into play – the data is “good enough” for the classification we’re trying to achieve. We know there is no company called “talk”, but we know it represents Talk Talk exclusively, thus can safely use it as a feature.
 Notes:
-Domain knowledge and understanding of the data itself is still key - being able to quickly filter out anything at the start will have its benefits for improving the efficiency of the correlation matrix. Finding the right balance of using data cleaning for obvious winners that will help improve efficiency in the correlation matrix itself and using the correlation matrix may help with data cleaning, which may be a manually intensive effort .
+Domain knowledge and understanding of the data itself is still key - being able to quickly filter out anything at the start will have its benefits for improving the efficiency of the correlation matrix. Finding the right balance of using data cleaning for obvious winners that will help improve efficiency in the correlation matrix itself and using the correlation matrix may help with data cleaning, which may be a manually intensive effort.
+
 e.g. the pseudocode
-if title contains ‘vodaphone’:
-	then title = ‘vodaphone’ 
+
+
+    if title contains ‘vodaphone’:
+	    then title = ‘vodaphone’ 
 etc.
 Doing this for every provider becomes unscalable very quickly and may be subject to bias when using a sample data set which is not necessarily representative of the complete data.
 
@@ -80,11 +84,13 @@ Could cross-fold validation against several random samples and use the mean valu
 
 
 __Tuning considerations:__
+
 Somewhat bespoke, but remember it is still less work reviewing this, quick is generated at low-cost, than building out yourself.
 set too high - not enough generalisation (maybe that is okay, depending on what you want the data to do next!) written before but this might be better wording.
 
 
 __Putting it all together__
+
 We’re in a good place to use this now.
 The quickest example is to assume we’re in a place to use this data as-is. In our example, we could classify on this directly
 Our DataFrame:
@@ -93,7 +99,8 @@ We can look at the average values for satisfaction ratings, years a customer has
 
 
 __Usage:__
-    This is not something that needs to be run on a daily basis.
+
+This is not something that needs to be run on a daily basis.
 depending on the frequency that your data changes and when new cases are input, the generalisations produced in our result set (if stored) can be applied to new data entries. Updating this list of our generalised result sets to be updated at user-defined frequencies away from whatever ML model and analytics solution built alongside.
 Performance considerations
 	•	Scalability of solution we are comparing all elements of x2 matrix of x elements.
@@ -104,6 +111,7 @@ Performance considerations
 	•	can run in parallel (RDD if happen to be using Spark, or concurrent.futures, or similar python concurrency tools)
 
 __Closing Thoughts__
+
 where else can be applied
 I’ve found a particular use case when looking at high variation in data column
 (tsql select distinct title counts)
