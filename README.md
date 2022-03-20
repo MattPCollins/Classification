@@ -21,13 +21,21 @@ One possible example could be a survey on broadband providers, where users are a
 ![](https://github.com/MattPCollins/Classification/blob/main/images/table1.png)
 
 
-Taking a closer look at the [broadband] column, which we might want to group our analysis by, it gives a quick insight into how users may manually input data "correctly", but makes classification based on these values that little bit harder.
+Taking a closer look at the "broadband" column, which we might want to group our analysis by, it gives a quick insight into how users may manually input data "correctly", but makes classification based on these values that little bit harder.
 *rename to fake companies???
-We could go through these one-by-one on a small scale, rectifying the data, find-and-replace searching for recurring redundant strings (such as “uk”), but when dealing with datasets of hundreds of records and trying to spot user self-defined titles can leave you a bit cross-eyed. Before long we may have a new provider being listed in the data set, for example some new users report they are with “Onestream”, “One Stream” or “OneStream Fibre” and our data cleansing process needs to be repeated.
+We could go through these one-by-one on a small scale, rectifying the data, find-and-replace searching for recurring redundant strings (such as “uk”), but when dealing with datasets of thousands of records and trying to spot titles defined by users rather than a system can leave you a bit cross-eyed. Before long we may have a new provider being listed in the data set, for example some new users report they are with “Onestream”, “One Stream” or “OneStream Fibre” and our data cleansing process needs to be repeated.
 Thus, we have our use case…
 
--> example, we can now have a company-by-company comparison of customer satisfaction, max monthly cost, avg time with customer etc to deliver these insights
+__Note:__
+Understanding the data being passed in is highly important in the analysis of our results - being able to quickly filter out anything at the start of the analysis process will have its benefits for improving the efficiency of the correlation matrix. Finding the right balance of using high level data cleaning techniques for obvious winners that will help improve efficiency in the correlation matrix itself and using the correlation matrix may help with data cleaning, which may be a manually intensive effort.
 
+For example, the pseudocode
+
+
+    if title contains ‘vodaphone’:
+	    then title = ‘vodaphone’ 
+
+Doing this for every provider becomes unscalable very quickly and may be subject to bias when using a sample data set which is not necessarily representative of the complete data.
 
 __Process__
 
@@ -39,9 +47,12 @@ Raw titles data:
 Unique list:
 ['bt', 'talk talk', 'vodaphone uk', 'talktalk', 'virgin media', 'sky uk', 'sky', 'virgin', 'vodaphone']
 
-->Python function, but what does it actually do??? (What is the maths)
+**->Python function, but what does it actually do??? (What is the maths)**
+
 We’re using the SequenceMatcher() class in the difflab package in Python to achieve this. This looks to directly compare two strings and find the longest contiguous matching subsequence.
-Why choose this over fuzzy matching?
+
+**Why choose this over fuzzy matching?**
+
 Fuzzy matching (or Approximate String Matching) is used to identify strings that are similar but not exactly the same. Within this, there are several algorithms which can be used, such as cosine similarity and the Levenshtein distance. These are valid approaches for what we’re trying to achieve here and model comparison and efficiency can be tested further down the line.
 
 Using SequenceMatcher() gave me a matrix detailing a quantitative correlation between each of the values. I’ve used the Plotly package to produce the output matrix plot as this interactive and we only need see the data when we’re highlighting the cells in question. 
@@ -61,29 +72,19 @@ Once we've grouped the similar items, we find the greatest common substring - th
 This reduces our feature set down from 9 elements to the following 5:
 ['bt', 'sky', 'virgin', 'talk', 'vodaphone']
 
-This is where the domain knowledge comes into play – the data is “good enough” for the classification we’re trying to achieve. We know there is no company called “talk”, but we know it represents Talk Talk exclusively, thus can safely use it as a feature.
-Notes:
-Domain knowledge and understanding of the data itself is still key - being able to quickly filter out anything at the start will have its benefits for improving the efficiency of the correlation matrix. Finding the right balance of using data cleaning for obvious winners that will help improve efficiency in the correlation matrix itself and using the correlation matrix may help with data cleaning, which may be a manually intensive effort.
-
-e.g. the pseudocode
-
-
-    if title contains ‘vodaphone’:
-	    then title = ‘vodaphone’ 
-etc.
-Doing this for every provider becomes unscalable very quickly and may be subject to bias when using a sample data set which is not necessarily representative of the complete data.
+This is where the domain knowledge comes into play – in this case, the data is “good enough” for the classification we’re trying to achieve. We know there is no company called “talk”, but we know it represents Talk Talk exclusively, thus can safely use it as a feature.
 
 We can evaluate a suitable correlation threshold by looking at the independence of the values in our result set. If these are deemed to be independent of each other, then we’ve created a result set that can effectively be used to simply out input data. 
 Again, it is worth taking consideration on the size of the values we’re comparing as similarity thresholds will be dependent on this.
 For example, if we are dealing with short strings (‘sky’,’virgin’) vs longer strings (‘complicated evaluation metric’, ‘simple evaluation metric’), then we might require different thresholds.
 We’ll also want to remember that at the higher similarity thresholds then we’re being very specific, so domain knowledge of “what to expect” of our data can be important.
 
-A quick plot against a sample like this gives us some useful info about what value might be worth choosing:
+A quick plot against a sample like this gives us some useful info about an appropriate value for similarity to use:
 
 ![](https://github.com/MattPCollins/Classification/blob/main/images/line_graph.png)
 
 
-Could cross-fold validation against several random samples and use the mean value to help ascertain threshold to use.
+**Could cross-fold validation against several random samples and use the mean value to help ascertain threshold to use.**
 
 
 __Tuning considerations:__
@@ -108,7 +109,8 @@ We can look at the average values for satisfaction ratings, years a customer has
 
 __Usage:__
 
-This is not something that needs to be run on a daily basis.
+**This is not something that needs to be run on a daily basis.**
+
 depending on the frequency that your data changes and when new cases are input, the generalisations produced in our result set (if stored) can be applied to new data entries. Updating this list of our generalised result sets to be updated at user-defined frequencies away from whatever ML model and analytics solution built alongside.
 Performance considerations
 	•	Scalability of solution we are comparing all elements of x2 matrix of x elements.
@@ -120,9 +122,12 @@ Performance considerations
 
 __Closing Thoughts__
 
-where else can be applied
-I’ve found a particular use case when looking at high variation in data column
-(tsql select distinct title counts)
+**where else can be applied**
+
+**I’ve found a particular use case when looking at high variation in data column**
+
+**(tsql select distinct title counts)**
+
 what value does it bring:
     reduces time in the data cleansing/processing phase
     automating away from heavy manual tasks
